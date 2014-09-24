@@ -3,7 +3,7 @@
 require "spec_helper"
 
 RSpec.describe Philiprehberger::IdGen::Snowflake do
-  let(:generator) { described_class::Generator.new(worker_id: 0) }
+  let(:generator) { Philiprehberger::IdGen::Snowflake::Generator.new(worker_id: 0) }
 
   describe Philiprehberger::IdGen::Snowflake::Generator do
     describe "#generate" do
