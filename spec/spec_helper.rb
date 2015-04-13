@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "philiprehberger/id_gen"
+require 'philiprehberger/id_gen'
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|

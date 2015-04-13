@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require_relative "id_gen/version"
-require_relative "id_gen/ulid"
-require_relative "id_gen/nanoid"
-require_relative "id_gen/prefixed"
-require_relative "id_gen/snowflake"
+require_relative 'id_gen/version'
+require_relative 'id_gen/ulid'
+require_relative 'id_gen/nanoid'
+require_relative 'id_gen/prefixed'
+require_relative 'id_gen/snowflake'
 
 module Philiprehberger
   module IdGen
