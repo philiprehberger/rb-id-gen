@@ -16,10 +16,11 @@ module Philiprehberger
       TIMESTAMP_SHIFT = WORKER_ID_BITS + SEQUENCE_BITS
 
       class Generator
-        def initialize(worker_id: 0)
+        def initialize(worker_id: 0, epoch: nil)
           raise Error, "Worker ID must be between 0 and #{MAX_WORKER_ID}" unless worker_id.between?(0, MAX_WORKER_ID)
 
           @worker_id = worker_id
+          @epoch_ms = epoch ? (epoch.to_f * 1000).to_i : CUSTOM_EPOCH
           @sequence = 0
           @last_timestamp = -1
           @mutex = Mutex.new
@@ -47,7 +48,7 @@ module Philiprehberger
         private
 
         def current_timestamp
-          (Time.now.to_f * 1000).to_i - CUSTOM_EPOCH
+          (Time.now.to_f * 1000).to_i - @epoch_ms
         end
 
         def wait_next_millis(last_timestamp)
@@ -59,8 +60,8 @@ module Philiprehberger
 
       module_function
 
-      def timestamp(id)
-        timestamp_ms = (id >> TIMESTAMP_SHIFT) + CUSTOM_EPOCH
+      def timestamp(id, epoch_ms: CUSTOM_EPOCH)
+        timestamp_ms = (id >> TIMESTAMP_SHIFT) + epoch_ms
         Time.at(timestamp_ms / 1000.0)
       end
     end

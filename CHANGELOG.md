@@ -7,6 +7,15 @@ and this gem adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-03-28
+
+### Added
+- UUID v7 generation (`IdGen.uuid_v7`) per RFC 9562 with timestamp extraction
+- Batch generation methods for all ID types (`ulid_batch`, `nanoid_batch`, `uuid_v7_batch`, `prefixed_batch`)
+- ID validation methods (`valid_ulid?`, `valid_nanoid?`, `valid_uuid_v7?`, `valid_snowflake?`)
+- ULID parsing with `IdGen.parse_ulid` returning timestamp and random components
+- Configurable epoch for snowflake ID generation
+
 ## [0.1.0] - 2026-03-21
 
 ### Added
