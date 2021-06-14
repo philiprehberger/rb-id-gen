@@ -7,6 +7,13 @@ and this gem adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-03-31
+
+### Added
+- CUID2 generation with `IdGen.cuid2(length:)` and batch/validation methods
+- Integer encoding/decoding with `IdGen.encode` and `IdGen.decode` using custom alphabets
+- Hashid encoding with `IdGen.hashid(integer, salt:, min_length:)` for obfuscated IDs
+
 ## [0.2.0] - 2026-03-28
 
 ### Added
