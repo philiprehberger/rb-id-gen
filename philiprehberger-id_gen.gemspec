@@ -10,8 +10,8 @@ Gem::Specification.new do |spec|
 
   spec.summary = 'Multi-format unique ID generator with ULID, nanoid, UUID v7, CUID2, prefixed, snowflake, and hashid'
   spec.description = 'Generate unique identifiers in multiple formats: time-sortable ULIDs, ' \
-                       'compact nanoids, UUID v7, CUID2, Stripe-style prefixed IDs, Twitter-style snowflake IDs, ' \
-                       'hashid obfuscation, and base-N encoding. Zero dependencies, thread-safe, cryptographically random.'
+                     'compact nanoids, UUID v7, CUID2, Stripe-style prefixed IDs, Twitter-style snowflake IDs, ' \
+                     'hashid obfuscation, and base-N encoding. Zero dependencies, thread-safe, cryptographically random.'
   spec.homepage = 'https://philiprehberger.com/open-source-packages/ruby/philiprehberger-id_gen'
   spec.license = 'MIT'
 
