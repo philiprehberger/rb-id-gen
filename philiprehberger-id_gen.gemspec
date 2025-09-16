@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors = ['Philip Rehberger']
   spec.email = ['me@philiprehberger.com']
 
-  spec.summary = 'Multi-format unique ID generator with ULID, nanoid, UUID v7, CUID2, prefixed, snowflake, and hashid'
+  spec.summary = 'Multi-format unique ID generator with ULID, nanoid, UUID v7, CUID2, prefixed, snowflake, hashid, and encoding support'
   spec.description = 'Generate unique identifiers in multiple formats: time-sortable ULIDs, ' \
                      'compact nanoids, UUID v7, CUID2, Stripe-style prefixed IDs, Twitter-style snowflake IDs, ' \
                      'hashid obfuscation, and base-N encoding. Zero dependencies, thread-safe, cryptographically random.'
