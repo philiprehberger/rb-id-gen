@@ -13,8 +13,8 @@ module Philiprehberger
       end
 
       def validate_prefix!(prefix)
-        raise Error, "Prefix must be a non-empty string" if prefix.nil? || !prefix.is_a?(String) || prefix.empty?
-        raise Error, "Prefix must contain only lowercase letters" unless prefix.match?(/\A[a-z]+\z/)
+        raise Error, 'Prefix must be a non-empty string' if prefix.nil? || !prefix.is_a?(String) || prefix.empty?
+        raise Error, 'Prefix must contain only lowercase letters' unless prefix.match?(/\A[a-z]+\z/)
       end
 
       private_class_method :validate_prefix!

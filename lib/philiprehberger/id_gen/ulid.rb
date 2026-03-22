@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require "securerandom"
+require 'securerandom'
 
 module Philiprehberger
   module IdGen
     module Ulid
-      CROCKFORD_BASE32 = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"
+      CROCKFORD_BASE32 = '0123456789ABCDEFGHJKMNPQRSTVWXYZ'
 
       TIMESTAMP_LENGTH = 10
       RANDOM_LENGTH = 16
@@ -54,7 +54,7 @@ module Philiprehberger
       end
 
       def encode_integer(value, length)
-        result = +""
+        result = +''
         length.times do
           result.prepend(CROCKFORD_BASE32[value & 0x1F])
           value >>= 5
