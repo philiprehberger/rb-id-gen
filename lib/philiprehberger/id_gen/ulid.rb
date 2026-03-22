@@ -25,14 +25,13 @@ module Philiprehberger
 
         if timestamp_ms == thread_state[:timestamp] && thread_state[:random]
           thread_state[:random] += 1
-          random_part = encode_integer(thread_state[:random], RANDOM_LENGTH)
         else
           thread_state[:timestamp] = timestamp_ms
           random_bytes = SecureRandom.random_bytes(10)
           thread_state[:random] = bytes_to_integer(random_bytes)
-          random_part = encode_integer(thread_state[:random], RANDOM_LENGTH)
         end
 
+        random_part = encode_integer(thread_state[:random], RANDOM_LENGTH)
         encode_timestamp(timestamp_ms) + random_part
       end
 

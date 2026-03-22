@@ -14,7 +14,7 @@ module Philiprehberger
         raise Error, 'Alphabet must not be empty' if alphabet.empty?
         raise Error, 'Alphabet must be 256 characters or fewer' if alphabet.length > 256
 
-        mask = (1 << Math.log2(alphabet.length - 1).ceil) - 1 | 1
+        mask = ((1 << Math.log2(alphabet.length - 1).ceil) - 1) | 1
         step = (1.6 * mask * size / alphabet.length).ceil
 
         id = +''

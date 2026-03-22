@@ -48,13 +48,12 @@ RSpec.describe Philiprehberger::IdGen::Snowflake do
 
   describe '.timestamp' do
     it 'extracts the correct Time from a snowflake ID' do
-      before = Time.now
+      before_time = Time.now
       id = generator.generate
-      after = Time.now
 
       extracted = described_class.timestamp(id)
       expect(extracted).to be_a(Time)
-      expect(extracted).to be_within(1).of(before)
+      expect(extracted).to be_within(1).of(before_time)
     end
   end
 end
