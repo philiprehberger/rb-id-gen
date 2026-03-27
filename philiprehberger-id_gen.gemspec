@@ -10,8 +10,8 @@ Gem::Specification.new do |spec|
 
   spec.summary       = 'Multi-format unique ID generator with ULID, nanoid, prefixed, and snowflake support'
   spec.description   = 'Generate unique identifiers in multiple formats: time-sortable ULIDs, ' \
-                        'compact nanoids, Stripe-style prefixed IDs, and Twitter-style snowflake IDs. ' \
-                        'Zero dependencies, thread-safe, cryptographically random.'
+                       'compact nanoids, Stripe-style prefixed IDs, and Twitter-style snowflake IDs. ' \
+                       'Zero dependencies, thread-safe, cryptographically random.'
   spec.homepage      = 'https://github.com/philiprehberger/rb-id-gen'
   spec.license       = 'MIT'
 
