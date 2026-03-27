@@ -3,6 +3,7 @@
 [![Tests](https://github.com/philiprehberger/rb-id-gen/actions/workflows/ci.yml/badge.svg)](https://github.com/philiprehberger/rb-id-gen/actions/workflows/ci.yml)
 [![Gem Version](https://badge.fury.io/rb/philiprehberger-id_gen.svg)](https://rubygems.org/gems/philiprehberger-id_gen)
 [![License](https://img.shields.io/github/license/philiprehberger/rb-id-gen)](LICENSE)
+[![Sponsor](https://img.shields.io/badge/sponsor-GitHub%20Sponsors-ec6cb9)](https://github.com/sponsors/philiprehberger)
 
 Multi-format unique ID generator with ULID, nanoid, prefixed, and snowflake support
 
