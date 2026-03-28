@@ -44,6 +44,28 @@ RSpec.describe Philiprehberger::IdGen::Snowflake do
       id2 = gen2.generate
       expect(id1).not_to eq(id2)
     end
+
+    context 'with custom epoch' do
+      let(:custom_epoch) { Time.utc(2015, 1, 1) }
+      let(:custom_generator) { described_class.new(worker_id: 0, epoch: custom_epoch) }
+
+      it 'generates a positive ID' do
+        id = custom_generator.generate
+        expect(id).to be_a(Integer)
+        expect(id).to be > 0
+      end
+
+      it 'generates different IDs than default epoch' do
+        default_id = generator.generate
+        custom_id = custom_generator.generate
+        expect(default_id).not_to eq(custom_id)
+      end
+
+      it 'generates unique IDs' do
+        ids = Array.new(100) { custom_generator.generate }
+        expect(ids.uniq.length).to eq(100)
+      end
+    end
   end
 
   describe '.timestamp' do
@@ -54,6 +76,17 @@ RSpec.describe Philiprehberger::IdGen::Snowflake do
       extracted = described_class.timestamp(id)
       expect(extracted).to be_a(Time)
       expect(extracted).to be_within(1).of(before_time)
+    end
+
+    it 'extracts the correct Time with a custom epoch' do
+      custom_epoch = Time.utc(2015, 1, 1)
+      custom_epoch_ms = (custom_epoch.to_f * 1000).to_i
+      custom_gen = Philiprehberger::IdGen::Snowflake::Generator.new(worker_id: 0, epoch: custom_epoch)
+      id = custom_gen.generate
+
+      extracted = described_class.timestamp(id, epoch_ms: custom_epoch_ms)
+      expect(extracted).to be_a(Time)
+      expect(extracted).to be_within(1).of(Time.now)
     end
   end
 end
