@@ -6,6 +6,9 @@ require_relative 'id_gen/nanoid'
 require_relative 'id_gen/prefixed'
 require_relative 'id_gen/snowflake'
 require_relative 'id_gen/uuid'
+require_relative 'id_gen/cuid2'
+require_relative 'id_gen/encoder'
+require_relative 'id_gen/hashid'
 
 module Philiprehberger
   module IdGen
@@ -60,6 +63,35 @@ module Philiprehberger
 
     def self.uuid_v7_timestamp(uuid_string)
       Uuid.timestamp_v7(uuid_string)
+    end
+
+    def self.cuid2(length: 24)
+      Cuid2.generate(length)
+    end
+
+    def self.cuid2_batch(count, length: 24)
+      validate_batch_count!(count)
+      Array.new(count) { Cuid2.generate(length) }
+    end
+
+    def self.valid_cuid2?(string, length: 24)
+      return false unless string.is_a?(String)
+      return false unless string.length == length
+      return false unless string[0].match?(/[a-z]/)
+
+      string.match?(/\A[a-z0-9]+\z/)
+    end
+
+    def self.encode(integer, alphabet: Encoder::DEFAULT_ALPHABET)
+      Encoder.encode(integer, alphabet: alphabet)
+    end
+
+    def self.decode(string, alphabet: Encoder::DEFAULT_ALPHABET)
+      Encoder.decode(string, alphabet: alphabet)
+    end
+
+    def self.hashid(integer, salt: '', min_length: 8)
+      Hashid.encode(integer, salt: salt, min_length: min_length)
     end
 
     # Batch generation methods

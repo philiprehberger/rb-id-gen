@@ -9,7 +9,7 @@
 [![Feature Requests](https://img.shields.io/github/issues/philiprehberger/rb-id-gen/enhancement)](https://github.com/philiprehberger/rb-id-gen/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement)
 [![Sponsor](https://img.shields.io/badge/sponsor-GitHub%20Sponsors-ec6cb9)](https://github.com/sponsors/philiprehberger)
 
-Multi-format unique ID generator with ULID, nanoid, UUID v7, prefixed, and snowflake support
+Multi-format unique ID generator with ULID, nanoid, UUID v7, CUID2, prefixed, snowflake, hashid, and encoding support
 
 ## Requirements
 
@@ -37,8 +37,11 @@ require "philiprehberger/id_gen"
 Philiprehberger::IdGen.ulid              # => "01HZ3V5K8E9ABCDEFGHJKMNPQR"
 Philiprehberger::IdGen.nanoid            # => "V1StGXR8_Z5jdHi6B-myT"
 Philiprehberger::IdGen.uuid_v7           # => "01902e6e-f460-7b1a-8c9d-e0f1a2b3c4d5"
+Philiprehberger::IdGen.cuid2             # => "k8f3h2j1m4n5p6q7r8s9t0u1"
 Philiprehberger::IdGen.prefixed("usr")   # => "usr_01hz3v5k8e9abcdefghjkmnpqr"
 Philiprehberger::IdGen.snowflake         # => 7089552452952064
+Philiprehberger::IdGen.hashid(42)        # => "aB3kZ9mQ"
+Philiprehberger::IdGen.encode(12345)     # => "3d7"
 ```
 
 ### ULID
@@ -88,6 +91,44 @@ Philiprehberger::IdGen.prefixed("org")  # => "org_01hz3v5k8e9abcdefghjkmnpqr"
 Philiprehberger::IdGen.prefixed("txn")  # => "txn_01hz3v5k8e9abcdefghjkmnpqr"
 ```
 
+### CUID2
+
+Collision-resistant, compact identifiers safe for use as HTML element IDs and database keys:
+
+```ruby
+require "philiprehberger/id_gen"
+
+Philiprehberger::IdGen.cuid2                # => 24-char lowercase alphanumeric, starts with letter
+Philiprehberger::IdGen.cuid2(length: 10)    # => custom length (2-32)
+Philiprehberger::IdGen.cuid2_batch(5)       # => Array of 5 CUID2s
+Philiprehberger::IdGen.valid_cuid2?("k8f3h2j1m4n5p6q7r8s9t0u1") # => true
+```
+
+### Encoding
+
+Encode and decode integers using customizable alphabets (base62 by default):
+
+```ruby
+require "philiprehberger/id_gen"
+
+Philiprehberger::IdGen.encode(12345)          # => base62 encoded string
+Philiprehberger::IdGen.decode("3d7")          # => integer value
+Philiprehberger::IdGen.encode(255, alphabet: "0123456789abcdef") # => "ff"
+Philiprehberger::IdGen.decode("ff", alphabet: "0123456789abcdef") # => 255
+```
+
+### Hashid
+
+Obfuscate integers into short, URL-safe strings using a salt:
+
+```ruby
+require "philiprehberger/id_gen"
+
+Philiprehberger::IdGen.hashid(42)                           # => obfuscated string (min 8 chars)
+Philiprehberger::IdGen.hashid(42, salt: "my-secret")        # => different output per salt
+Philiprehberger::IdGen.hashid(42, salt: "s", min_length: 12) # => at least 12 chars
+```
+
 ### Snowflake IDs
 
 Twitter-style 64-bit integer identifiers:
@@ -116,6 +157,7 @@ Philiprehberger::IdGen.ulid_batch(10)                # => Array of 10 ULIDs
 Philiprehberger::IdGen.nanoid_batch(5, size: 12)     # => Array of 5 nanoids (12 chars each)
 Philiprehberger::IdGen.uuid_v7_batch(10)             # => Array of 10 UUID v7s
 Philiprehberger::IdGen.prefixed_batch("usr", 5)      # => Array of 5 prefixed IDs
+Philiprehberger::IdGen.cuid2_batch(10)               # => Array of 10 CUID2s
 ```
 
 ### Validation
@@ -129,6 +171,7 @@ Philiprehberger::IdGen.valid_ulid?("01HZ3V5K8E9ABCDEFGHJKMNPQR")   # => true
 Philiprehberger::IdGen.valid_nanoid?("V1StGXR8_Z5jdHi6B-myT")      # => true
 Philiprehberger::IdGen.valid_uuid_v7?("01902e6e-f460-7b1a-8c9d-e0f1a2b3c4d5") # => true
 Philiprehberger::IdGen.valid_snowflake?(7089552452952064)           # => true
+Philiprehberger::IdGen.valid_cuid2?("k8f3h2j1m4n5p6q7r8s9t0u1")   # => true
 ```
 
 ### ULID Parsing
@@ -165,6 +208,12 @@ result[:random]    # => hex string of the random component
 | `IdGen.valid_nanoid?(string, size:, alphabet:)` | Validate nanoid format |
 | `IdGen.valid_uuid_v7?(string)` | Validate UUID v7 format |
 | `IdGen.valid_snowflake?(id)` | Validate snowflake ID |
+| `IdGen.cuid2(length: 24)` | Generate a CUID2 identifier |
+| `IdGen.cuid2_batch(count, length: 24)` | Generate an array of CUID2s |
+| `IdGen.valid_cuid2?(string, length: 24)` | Validate CUID2 format |
+| `IdGen.encode(integer, alphabet:)` | Encode integer to base-N string (default base62) |
+| `IdGen.decode(string, alphabet:)` | Decode base-N string to integer |
+| `IdGen.hashid(integer, salt:, min_length:)` | Encode integer to obfuscated hashid string |
 
 ## Development
 
