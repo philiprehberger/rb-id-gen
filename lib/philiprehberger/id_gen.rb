@@ -146,6 +146,28 @@ module Philiprehberger
       timestamp_ms.positive? && timestamp_ms < (Snowflake::CUSTOM_EPOCH + (100 * 365.25 * 24 * 60 * 60 * 1000).to_i)
     end
 
+    # Detect the format of an ID by probing the format-specific validators.
+    # Probing order (most specific first): ULID, UUID v7, Snowflake (Integer
+    # or numeric String), CUID2, Nanoid. Returns a Symbol identifying the
+    # format (`:ulid`, `:uuid_v7`, `:snowflake`, `:cuid2`, `:nanoid`) or
+    # `nil` when nothing matches.
+    #
+    # Nanoid intentionally runs last because its default alphabet overlaps
+    # with many others — treat `:nanoid` as a fallback identification only.
+    #
+    # @param id [String, Integer] the candidate ID
+    # @return [Symbol, nil] detected format, or nil when no format matches
+    def self.detect_format(id)
+      return :ulid if id.is_a?(String) && valid_ulid?(id)
+      return :uuid_v7 if id.is_a?(String) && valid_uuid_v7?(id)
+      return :snowflake if valid_snowflake?(id)
+      return :snowflake if id.is_a?(String) && id.match?(/\A\d+\z/) && valid_snowflake?(id.to_i)
+      return :cuid2 if id.is_a?(String) && valid_cuid2?(id)
+      return :nanoid if id.is_a?(String) && valid_nanoid?(id)
+
+      nil
+    end
+
     # ULID parsing
 
     def self.parse_ulid(string)
