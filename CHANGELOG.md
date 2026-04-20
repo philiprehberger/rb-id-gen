@@ -7,6 +7,11 @@ and this gem adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-04-20
+
+### Added
+- `IdGen.detect_format(id)` — probe the built-in validators to identify the format of an unknown ID. Returns `:ulid`, `:uuid_v7`, `:snowflake`, `:cuid2`, or `:nanoid` (fallback), or `nil` when nothing matches. Accepts both `String` and `Integer` inputs and recognises numeric Snowflake strings.
+
 ## [0.3.2] - 2026-04-08
 
 ### Changed

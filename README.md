@@ -167,6 +167,10 @@ Philiprehberger::IdGen.valid_nanoid?("V1StGXR8_Z5jdHi6B-myT")      # => true
 Philiprehberger::IdGen.valid_uuid_v7?("01902e6e-f460-7b1a-8c9d-e0f1a2b3c4d5") # => true
 Philiprehberger::IdGen.valid_snowflake?(7089552452952064)           # => true
 Philiprehberger::IdGen.valid_cuid2?("k8f3h2j1m4n5p6q7r8s9t0u1")   # => true
+
+Philiprehberger::IdGen.detect_format(Philiprehberger::IdGen.ulid)    # => :ulid
+Philiprehberger::IdGen.detect_format(Philiprehberger::IdGen.uuid_v7) # => :uuid_v7
+Philiprehberger::IdGen.detect_format("not-an-id")                    # => nil
 ```
 
 ### ULID Parsing
@@ -206,6 +210,7 @@ result[:random]    # => hex string of the random component
 | `IdGen.cuid2(length: 24)` | Generate a CUID2 identifier |
 | `IdGen.cuid2_batch(count, length: 24)` | Generate an array of CUID2s |
 | `IdGen.valid_cuid2?(string, length: 24)` | Validate CUID2 format |
+| `IdGen.detect_format(id)` | Detect ID format: `:ulid`, `:uuid_v7`, `:snowflake`, `:cuid2`, `:nanoid`, or `nil` |
 | `IdGen.encode(integer, alphabet:)` | Encode integer to base-N string (default base62) |
 | `IdGen.decode(string, alphabet:)` | Decode base-N string to integer |
 | `IdGen.hashid(integer, salt:, min_length:)` | Encode integer to obfuscated hashid string |

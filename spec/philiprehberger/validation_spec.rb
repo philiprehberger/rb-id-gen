@@ -95,4 +95,38 @@ RSpec.describe 'ID validation' do
       expect(Philiprehberger::IdGen.valid_snowflake?(huge_id)).to be false
     end
   end
+
+  describe 'IdGen.detect_format' do
+    it 'detects a ULID' do
+      expect(Philiprehberger::IdGen.detect_format(Philiprehberger::IdGen.ulid)).to eq(:ulid)
+    end
+
+    it 'detects a UUID v7' do
+      expect(Philiprehberger::IdGen.detect_format(Philiprehberger::IdGen.uuid_v7)).to eq(:uuid_v7)
+    end
+
+    it 'detects a Snowflake integer' do
+      expect(Philiprehberger::IdGen.detect_format(Philiprehberger::IdGen.snowflake)).to eq(:snowflake)
+    end
+
+    it 'detects a numeric Snowflake string' do
+      expect(Philiprehberger::IdGen.detect_format(Philiprehberger::IdGen.snowflake.to_s)).to eq(:snowflake)
+    end
+
+    it 'detects a CUID2' do
+      expect(Philiprehberger::IdGen.detect_format(Philiprehberger::IdGen.cuid2)).to eq(:cuid2)
+    end
+
+    it 'detects a Nanoid as the fallback' do
+      expect(Philiprehberger::IdGen.detect_format(Philiprehberger::IdGen.nanoid)).to eq(:nanoid)
+    end
+
+    it 'returns nil for an unrecognizable string' do
+      expect(Philiprehberger::IdGen.detect_format('!@#$%')).to be_nil
+    end
+
+    it 'returns nil for nil' do
+      expect(Philiprehberger::IdGen.detect_format(nil)).to be_nil
+    end
+  end
 end
