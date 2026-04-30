@@ -135,10 +135,15 @@ id = Philiprehberger::IdGen.snowflake                    # => 7089552452952064
 id = Philiprehberger::IdGen.snowflake(worker_id: 5)      # => different sequence per worker
 timestamp = Philiprehberger::IdGen.snowflake_timestamp(id) # => 2026-03-21 12:00:00 UTC
 
+# Decompose into timestamp, worker_id, and sequence
+parts = Philiprehberger::IdGen.snowflake_decompose(id)
+# => { timestamp: <Time>, worker_id: 5, sequence: 0 }
+
 # Custom epoch
 custom_epoch = Time.utc(2015, 1, 1)
 id = Philiprehberger::IdGen.snowflake(worker_id: 0, epoch: custom_epoch)
 timestamp = Philiprehberger::IdGen.snowflake_timestamp(id, epoch: custom_epoch)
+parts = Philiprehberger::IdGen.snowflake_decompose(id, epoch: custom_epoch)
 ```
 
 ### Batch Generation
@@ -199,6 +204,7 @@ result[:random]    # => hex string of the random component
 | `IdGen.prefixed(prefix)` | Generate a prefixed ID (e.g., `usr_...`) |
 | `IdGen.snowflake(worker_id: 0, epoch: nil)` | Generate a 64-bit snowflake ID with optional custom epoch |
 | `IdGen.snowflake_timestamp(id, epoch: nil)` | Extract a `Time` from a snowflake ID |
+| `IdGen.snowflake_decompose(id, epoch: nil)` | Split a snowflake ID into `{ timestamp:, worker_id:, sequence: }` |
 | `IdGen.ulid_batch(count)` | Generate an array of ULIDs |
 | `IdGen.nanoid_batch(count, size:, alphabet:)` | Generate an array of nanoids |
 | `IdGen.uuid_v7_batch(count)` | Generate an array of UUID v7s |

@@ -64,6 +64,14 @@ module Philiprehberger
         timestamp_ms = (id >> TIMESTAMP_SHIFT) + epoch_ms
         Time.at(timestamp_ms / 1000.0)
       end
+
+      def decompose(id, epoch_ms: CUSTOM_EPOCH)
+        {
+          timestamp: timestamp(id, epoch_ms: epoch_ms),
+          worker_id: (id >> WORKER_ID_SHIFT) & MAX_WORKER_ID,
+          sequence: id & MAX_SEQUENCE
+        }
+      end
     end
   end
 end

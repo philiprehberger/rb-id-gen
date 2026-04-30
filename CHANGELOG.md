@@ -7,6 +7,12 @@ and this gem adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-04-30
+
+### Added
+- `IdGen.snowflake_decompose(id, epoch: nil)` — split a snowflake ID into `{ timestamp:, worker_id:, sequence: }`. Useful for hot-spotting analysis and audit logs. Custom epoch is honored.
+- `Snowflake.decompose(id, epoch_ms:)` — module-level decomposition that powers the dispatcher.
+
 ## [0.4.0] - 2026-04-20
 
 ### Added

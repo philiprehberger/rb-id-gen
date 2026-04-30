@@ -89,4 +89,43 @@ RSpec.describe Philiprehberger::IdGen::Snowflake do
       expect(extracted).to be_within(1).of(Time.now)
     end
   end
+
+  describe '.decompose' do
+    it 'returns a hash with :timestamp, :worker_id, and :sequence' do
+      id = Philiprehberger::IdGen::Snowflake::Generator.new(worker_id: 7).generate
+      result = described_class.decompose(id)
+      expect(result.keys).to contain_exactly(:timestamp, :worker_id, :sequence)
+      expect(result[:worker_id]).to eq(7)
+      expect(result[:timestamp]).to be_a(Time)
+    end
+
+    it 'recovers worker_id for arbitrary worker_ids' do
+      [0, 1, 5, 42, 1023].each do |wid|
+        id = Philiprehberger::IdGen::Snowflake::Generator.new(worker_id: wid).generate
+        expect(described_class.decompose(id)[:worker_id]).to eq(wid)
+      end
+    end
+
+    it 'returns sequences that increase within the same millisecond' do
+      gen = Philiprehberger::IdGen::Snowflake::Generator.new(worker_id: 1)
+      ids = Array.new(5) { gen.generate }
+      seqs = ids.map { |id| described_class.decompose(id)[:sequence] }
+      expect(seqs).to eq(seqs.sort)
+    end
+
+    it 'matches .timestamp output for the same id' do
+      id = Philiprehberger::IdGen::Snowflake::Generator.new(worker_id: 0).generate
+      expect(described_class.decompose(id)[:timestamp]).to eq(described_class.timestamp(id))
+    end
+
+    it 'honors a custom epoch_ms' do
+      custom_epoch = Time.utc(2015, 1, 1)
+      custom_epoch_ms = (custom_epoch.to_f * 1000).to_i
+      gen = Philiprehberger::IdGen::Snowflake::Generator.new(worker_id: 9, epoch: custom_epoch)
+      id = gen.generate
+      result = described_class.decompose(id, epoch_ms: custom_epoch_ms)
+      expect(result[:worker_id]).to eq(9)
+      expect(result[:timestamp]).to be_within(1).of(Time.now)
+    end
+  end
 end

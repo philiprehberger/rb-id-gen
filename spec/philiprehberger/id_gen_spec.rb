@@ -88,6 +88,25 @@ RSpec.describe Philiprehberger::IdGen do
     end
   end
 
+  describe '.snowflake_decompose' do
+    it 'returns timestamp, worker_id, and sequence' do
+      id = described_class.snowflake(worker_id: 3)
+      parts = described_class.snowflake_decompose(id)
+      expect(parts.keys).to contain_exactly(:timestamp, :worker_id, :sequence)
+      expect(parts[:worker_id]).to eq(3)
+      expect(parts[:timestamp]).to be_a(Time)
+      expect(parts[:sequence]).to be_a(Integer)
+    end
+
+    it 'flows custom epoch through to the snowflake module' do
+      custom_epoch = Time.utc(2015, 1, 1)
+      id = described_class.snowflake(worker_id: 4, epoch: custom_epoch)
+      parts = described_class.snowflake_decompose(id, epoch: custom_epoch)
+      expect(parts[:worker_id]).to eq(4)
+      expect(parts[:timestamp]).to be_within(1).of(Time.now)
+    end
+  end
+
   describe '.uuid_v7' do
     it 'returns a valid UUID v7 string' do
       uuid = described_class.uuid_v7

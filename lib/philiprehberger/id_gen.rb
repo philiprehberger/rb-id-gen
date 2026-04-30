@@ -57,6 +57,25 @@ module Philiprehberger
       end
     end
 
+    # Decompose a snowflake ID into its three components.
+    #
+    # Returns a hash with `:timestamp` (Time, derived from the optional
+    # `epoch:` shift), `:worker_id` (Integer), and `:sequence` (Integer).
+    # Useful for debugging hot-spotting (which worker), throughput analytics
+    # (sequence saturation), and audit logs.
+    #
+    # @param id [Integer] the snowflake ID
+    # @param epoch [Time, nil] custom epoch used at generation time, if any
+    # @return [Hash{Symbol => Object}] `{ timestamp:, worker_id:, sequence: }`
+    def self.snowflake_decompose(id, epoch: nil)
+      if epoch
+        epoch_ms = (epoch.to_f * 1000).to_i
+        Snowflake.decompose(id, epoch_ms: epoch_ms)
+      else
+        Snowflake.decompose(id)
+      end
+    end
+
     def self.uuid_v7
       Uuid.generate_v7
     end
