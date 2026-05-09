@@ -74,6 +74,18 @@ uuid = Philiprehberger::IdGen.uuid_v7                    # => "01902e6e-f460-7b1
 timestamp = Philiprehberger::IdGen.uuid_v7_timestamp(uuid) # => 2026-03-28 12:00:00 UTC
 ```
 
+### UUID v4
+
+Random RFC 4122 v4 UUIDs (cryptographically strong, no time component):
+
+```ruby
+require "philiprehberger/id_gen"
+
+uuid = Philiprehberger::IdGen.uuid_v4         # => "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+Philiprehberger::IdGen.valid_uuid_v4?(uuid)   # => true
+Philiprehberger::IdGen.uuid_v4_batch(5)       # => Array of 5 v4 UUIDs
+```
+
 ### Prefixed IDs
 
 Stripe-style identifiers with a type prefix:
@@ -156,6 +168,7 @@ require "philiprehberger/id_gen"
 Philiprehberger::IdGen.ulid_batch(10)                # => Array of 10 ULIDs
 Philiprehberger::IdGen.nanoid_batch(5, size: 12)     # => Array of 5 nanoids (12 chars each)
 Philiprehberger::IdGen.uuid_v7_batch(10)             # => Array of 10 UUID v7s
+Philiprehberger::IdGen.uuid_v4_batch(10)             # => Array of 10 UUID v4s
 Philiprehberger::IdGen.prefixed_batch("usr", 5)      # => Array of 5 prefixed IDs
 Philiprehberger::IdGen.cuid2_batch(10)               # => Array of 10 CUID2s
 ```
@@ -170,6 +183,7 @@ require "philiprehberger/id_gen"
 Philiprehberger::IdGen.valid_ulid?("01HZ3V5K8E9ABCDEFGHJKMNPQR")   # => true
 Philiprehberger::IdGen.valid_nanoid?("V1StGXR8_Z5jdHi6B-myT")      # => true
 Philiprehberger::IdGen.valid_uuid_v7?("01902e6e-f460-7b1a-8c9d-e0f1a2b3c4d5") # => true
+Philiprehberger::IdGen.valid_uuid_v4?("f47ac10b-58cc-4372-a567-0e02b2c3d479") # => true
 Philiprehberger::IdGen.valid_snowflake?(7089552452952064)           # => true
 Philiprehberger::IdGen.valid_cuid2?("k8f3h2j1m4n5p6q7r8s9t0u1")   # => true
 
@@ -201,6 +215,9 @@ result[:random]    # => hex string of the random component
 | `IdGen.nanoid(size = 21, alphabet: DEFAULT_ALPHABET)` | Generate a nanoid with optional size and alphabet |
 | `IdGen.uuid_v7` | Generate a RFC 9562 UUID v7 (time-ordered) |
 | `IdGen.uuid_v7_timestamp(uuid_string)` | Extract a `Time` from a UUID v7 string |
+| `IdGen.uuid_v4` | Generate a RFC 4122 UUID v4 (random) |
+| `IdGen.valid_uuid_v4?(string)` | Validate UUID v4 format |
+| `IdGen.uuid_v4_batch(count)` | Generate an array of UUID v4s |
 | `IdGen.prefixed(prefix)` | Generate a prefixed ID (e.g., `usr_...`) |
 | `IdGen.snowflake(worker_id: 0, epoch: nil)` | Generate a 64-bit snowflake ID with optional custom epoch |
 | `IdGen.snowflake_timestamp(id, epoch: nil)` | Extract a `Time` from a snowflake ID |
@@ -216,7 +233,7 @@ result[:random]    # => hex string of the random component
 | `IdGen.cuid2(length: 24)` | Generate a CUID2 identifier |
 | `IdGen.cuid2_batch(count, length: 24)` | Generate an array of CUID2s |
 | `IdGen.valid_cuid2?(string, length: 24)` | Validate CUID2 format |
-| `IdGen.detect_format(id)` | Detect ID format: `:ulid`, `:uuid_v7`, `:snowflake`, `:cuid2`, `:nanoid`, or `nil` |
+| `IdGen.detect_format(id)` | Detect ID format: `:ulid`, `:uuid_v7`, `:uuid_v4`, `:snowflake`, `:cuid2`, `:nanoid`, or `nil` |
 | `IdGen.encode(integer, alphabet:)` | Encode integer to base-N string (default base62) |
 | `IdGen.decode(string, alphabet:)` | Decode base-N string to integer |
 | `IdGen.hashid(integer, salt:, min_length:)` | Encode integer to obfuscated hashid string |

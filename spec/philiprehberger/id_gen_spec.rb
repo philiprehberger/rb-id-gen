@@ -122,4 +122,58 @@ RSpec.describe Philiprehberger::IdGen do
       expect(result).to be_within(1).of(Time.now)
     end
   end
+
+  describe '.uuid_v4' do
+    it 'returns a 36-character canonical UUID v4 string' do
+      uuid = described_class.uuid_v4
+      expect(uuid.length).to eq(36)
+      expect(uuid).to match(/\A[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\z/)
+    end
+
+    it 'returns unique values' do
+      ids = Array.new(50) { described_class.uuid_v4 }
+      expect(ids.uniq.length).to eq(50)
+    end
+  end
+
+  describe '.valid_uuid_v4?' do
+    it 'accepts a generated UUID v4' do
+      expect(described_class.valid_uuid_v4?(described_class.uuid_v4)).to be true
+    end
+
+    it 'rejects a UUID v7' do
+      expect(described_class.valid_uuid_v4?(described_class.uuid_v7)).to be false
+    end
+
+    it 'rejects malformed input' do
+      expect(described_class.valid_uuid_v4?('not-a-uuid')).to be false
+      expect(described_class.valid_uuid_v4?(nil)).to be false
+      expect(described_class.valid_uuid_v4?(42)).to be false
+    end
+
+    it 'is case-insensitive on hex digits' do
+      uuid = described_class.uuid_v4
+      expect(described_class.valid_uuid_v4?(uuid.upcase)).to be true
+    end
+  end
+
+  describe '.uuid_v4_batch' do
+    it 'returns an array of N unique UUID v4 strings' do
+      ids = described_class.uuid_v4_batch(20)
+      expect(ids.length).to eq(20)
+      expect(ids.uniq.length).to eq(20)
+      expect(ids).to all(satisfy { |s| described_class.valid_uuid_v4?(s) })
+    end
+
+    it 'raises for non-positive counts' do
+      expect { described_class.uuid_v4_batch(0) }
+        .to raise_error(Philiprehberger::IdGen::Error)
+    end
+  end
+
+  describe '.detect_format with UUID v4' do
+    it 'identifies a UUID v4' do
+      expect(described_class.detect_format(described_class.uuid_v4)).to eq(:uuid_v4)
+    end
+  end
 end

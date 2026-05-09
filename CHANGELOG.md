@@ -7,6 +7,14 @@ and this gem adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-05-09
+
+### Added
+- `IdGen.uuid_v4` — RFC 4122 v4 random UUID generator (delegates to `SecureRandom.uuid` for strict spec compliance).
+- `IdGen.valid_uuid_v4?(string)` — UUID v4 format validator (case-insensitive on hex digits).
+- `IdGen.uuid_v4_batch(count)` — generate an array of `count` UUID v4s.
+- `IdGen.detect_format` now returns `:uuid_v4` for valid v4 UUIDs (probed after v7).
+
 ## [0.5.0] - 2026-04-30
 
 ### Added

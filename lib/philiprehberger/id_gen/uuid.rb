@@ -7,6 +7,16 @@ module Philiprehberger
     module Uuid
       module_function
 
+      def generate_v4
+        SecureRandom.uuid
+      end
+
+      def valid_v4?(uuid_string)
+        return false unless uuid_string.is_a?(String)
+
+        uuid_string.match?(/\A[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\z/i)
+      end
+
       def generate_v7
         timestamp_ms = (Time.now.to_f * 1000).to_i
         random_bytes = SecureRandom.random_bytes(10)

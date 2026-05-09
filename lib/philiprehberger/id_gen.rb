@@ -76,6 +76,22 @@ module Philiprehberger
       end
     end
 
+    # Generate a random RFC 4122 v4 UUID
+    #
+    # Delegates to `SecureRandom.uuid` for strict spec compliance — the
+    # output always carries the `4` version nibble and a `8/9/a/b` variant
+    # nibble. Suitable for cryptographically-strong unique IDs without
+    # the time-based ordering of v7.
+    #
+    # @return [String] 36-character canonical UUID string
+    def self.uuid_v4
+      Uuid.generate_v4
+    end
+
+    def self.valid_uuid_v4?(string)
+      Uuid.valid_v4?(string)
+    end
+
     def self.uuid_v7
       Uuid.generate_v7
     end
@@ -123,6 +139,11 @@ module Philiprehberger
     def self.nanoid_batch(count, size: 21, alphabet: Nanoid::DEFAULT_ALPHABET)
       validate_batch_count!(count)
       Array.new(count) { Nanoid.generate(size, alphabet: alphabet) }
+    end
+
+    def self.uuid_v4_batch(count)
+      validate_batch_count!(count)
+      Array.new(count) { Uuid.generate_v4 }
     end
 
     def self.uuid_v7_batch(count)
@@ -179,6 +200,7 @@ module Philiprehberger
     def self.detect_format(id)
       return :ulid if id.is_a?(String) && valid_ulid?(id)
       return :uuid_v7 if id.is_a?(String) && valid_uuid_v7?(id)
+      return :uuid_v4 if id.is_a?(String) && valid_uuid_v4?(id)
       return :snowflake if valid_snowflake?(id)
       return :snowflake if id.is_a?(String) && id.match?(/\A\d+\z/) && valid_snowflake?(id.to_i)
       return :cuid2 if id.is_a?(String) && valid_cuid2?(id)
